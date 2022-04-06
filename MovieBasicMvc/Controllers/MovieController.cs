@@ -43,6 +43,8 @@ namespace MovieBasicMvc.Controllers
             var selectedMovie = 
                 Movies.Find(m => m.Id == id);
 
+            // ViewBag.Movie = selectedMovie;
+            // TempData, ViewBag, ViewData
             return View(selectedMovie);
         }
 

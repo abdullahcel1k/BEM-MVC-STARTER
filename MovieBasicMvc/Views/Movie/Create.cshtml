@@ -1,33 +1,22 @@
 ﻿@model Movie
 
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <title></title>
-    <link rel="stylesheet"
-          href="~/lib/bootstrap/css/bootstrap.min.css" />
-    <link rel="stylesheet"
-          href="~/css/style.css" />
-</head>
-<body>
-    <div asp-validation-summary="All" 
-         class="alert alert-danger" ></div>
-    <form asp-action="CreatePost">
-        <div class="mb-3">
-            <label class="form-label">Film Adı</label>
-            <input type="text" 
-                   class="form-control" asp-for="Name">
-        </div>
-        <div class="mb-3">
-            <label class="form-label">Film Resmi</label>
-            <input type="text" 
-                   class="form-control" asp-for="ImgUrl">
-        </div>
-        <div class="mb-3">
-            <label class="form-label">Film Yıldızı</label>
-            <input type="number" 
-                   class="form-control" asp-for="StarRate">
-        </div>
-        <button type="submit" class="btn btn-primary">Filmi Kaydet</button>
-    </form>
-</body>
-</html>
+<div asp-validation-summary="All"
+     class="alert alert-danger"></div>
+<form asp-action="CreatePost">
+    <div class="mb-3">
+        <label class="form-label">Film Adı</label>
+        <input type="text"
+               class="form-control" asp-for="Name">
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Film Resmi</label>
+        <input type="text"
+               class="form-control" asp-for="ImgUrl">
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Film Yıldızı</label>
+        <input type="number"
+               class="form-control" asp-for="StarRate">
+    </div>
+    <button type="submit" class="btn btn-primary">Filmi Kaydet</button>
+</form>
