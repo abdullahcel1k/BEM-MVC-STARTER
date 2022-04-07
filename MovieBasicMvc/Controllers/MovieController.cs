@@ -36,7 +36,8 @@ namespace MovieBasicMvc.Controllers
 
         public IActionResult Save()
         {
-            return View();
+            Movie movie = new Movie();
+            return View(movie);
         }
 
         [HttpPost]
@@ -44,7 +45,7 @@ namespace MovieBasicMvc.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View("Create");
+                return View("Save");
             }
 
             if(film.Id != 0)
