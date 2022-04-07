@@ -13,6 +13,8 @@ namespace MovieBasicMvc.Models
         [Required]
         [MaxLength(250, ErrorMessage = "Lütfen en fazla 250 karakter giriniz.")]
         public string Name { get; set; }
+        [MaxLength(1500, ErrorMessage = "Lütfen en fazla 1500 karakter giriniz.")]
+        public string Description { get; set; }
         [Required]
         public string ImgUrl { get; set; }
         public double StarRate { get; set; }

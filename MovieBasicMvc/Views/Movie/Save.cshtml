@@ -2,7 +2,8 @@
 
 <div asp-validation-summary="All"
      class="alert alert-danger"></div>
-<form asp-action="CreatePost">
+<form asp-action="SaveMovie">
+    <input asp-for="Id" hidden value="0" />
     <div class="mb-3">
         <label class="form-label">Film Adı</label>
         <input type="text"

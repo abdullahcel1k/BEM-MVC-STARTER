@@ -3,7 +3,7 @@
     ViewBag.Title = "Anasayfa";
 }
 <div class="row">
-    <a asp-action="Create"
+    <a asp-action="Save"
        class="btn btn-success">
         Yeni Film Ekle
     </a>
@@ -20,6 +20,11 @@
                    asp-route-id="@item.Id"
                    class="btn btn-primary">
                     Filmi Görüntüle
+                </a>
+                <a asp-action="Update"
+                   asp-route-id="@item.Id"
+                   class="btn btn-warning">
+                    Filmi Güncelle
                 </a>
                 <form asp-action="Delete"
                       asp-route-id="@item.Id">

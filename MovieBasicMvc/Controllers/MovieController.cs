@@ -1,79 +1,86 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MovieBasicMvc.Data;
 using MovieBasicMvc.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace MovieBasicMvc.Controllers
 {
     public class MovieController : Controller
     {
-        public static List<Movie> Movies { get; set; } = new List<Movie>()
+        private readonly MovieContext _context;
+
+        public MovieController(MovieContext context)
         {
-            new Movie() { Id= 1, Name= "The Batman", 
-                ImgUrl= "https://m.media-amazon.com/images/M/MV5BOGE2NWUwMDItMjA4Yi00N2Y3LWJjMzEtMDJjZTMzZTdlZGE5XkEyXkFqcGdeQXVyODk4OTc3MTY@._V1_.jpg",
-                StarRate=8.3 },
-            new Movie() { Id= 2, Name= "The Batman2",
-                ImgUrl="https://m.media-amazon.com/images/M/MV5BOGE2NWUwMDItMjA4Yi00N2Y3LWJjMzEtMDJjZTMzZTdlZGE5XkEyXkFqcGdeQXVyODk4OTc3MTY@._V1_.jpg",
-                StarRate=8.2 },
-            new Movie() { Id= 3, Name= "The Batman3",
-                ImgUrl= "https://m.media-amazon.com/images/M/MV5BOGE2NWUwMDItMjA4Yi00N2Y3LWJjMzEtMDJjZTMzZTdlZGE5XkEyXkFqcGdeQXVyODk4OTc3MTY@._V1_.jpg",
-                StarRate =8.1 },
-            new Movie() { Id= 4, Name= "The Batman4",
-                ImgUrl= "https://m.media-amazon.com/images/M/MV5BOGE2NWUwMDItMjA4Yi00N2Y3LWJjMzEtMDJjZTMzZTdlZGE5XkEyXkFqcGdeQXVyODk4OTc3MTY@._V1_.jpg",
-                StarRate =8.3 },
-            new Movie() { Id= 5, Name= "The Batman5",
-                ImgUrl= "https://m.media-amazon.com/images/M/MV5BOGE2NWUwMDItMjA4Yi00N2Y3LWJjMzEtMDJjZTMzZTdlZGE5XkEyXkFqcGdeQXVyODk4OTc3MTY@._V1_.jpg",
-                StarRate =7.9 },
-            new Movie() { Id= 6, Name= "The Batman6",
-                ImgUrl= "https://m.media-amazon.com/images/M/MV5BOGE2NWUwMDItMjA4Yi00N2Y3LWJjMzEtMDJjZTMzZTdlZGE5XkEyXkFqcGdeQXVyODk4OTc3MTY@._V1_.jpg",
-                StarRate =9.4 },
-            new Movie() { Id= 7, Name= "The Batman7",
-                ImgUrl= "https://m.media-amazon.com/images/M/MV5BOGE2NWUwMDItMjA4Yi00N2Y3LWJjMzEtMDJjZTMzZTdlZGE5XkEyXkFqcGdeQXVyODk4OTc3MTY@._V1_.jpg",
-                StarRate =8.9 },
-        };
+            _context = context;
+        }
 
         public IActionResult Index()
         {
-            return View(Movies);
+            return View(_context.Movies.ToList());
         }
 
         public IActionResult Detail(int id)
         {
 
-            var selectedMovie = 
-                Movies.Find(m => m.Id == id);
+            var selectedMovie = _context.Movies
+                                    .SingleOrDefault(m => m.Id == id);
+
 
             // ViewBag.Movie = selectedMovie;
             // TempData, ViewBag, ViewData
             return View(selectedMovie);
         }
 
- 
-        public IActionResult Create()
+
+        public IActionResult Save()
         {
             return View();
         }
 
         [HttpPost]
-        public IActionResult CreatePost(Movie film)
+        public IActionResult SaveMovie(Movie film)
         {
             if (!ModelState.IsValid)
             {
                 return View("Create");
             }
-            Random rastgele = new Random();
-            film.Id = rastgele.Next(1000, 100000);
-            Movies.Add(film);
+
+            if(film.Id != 0)
+            {
+                var updatedMovie = _context.Movies
+                                    .SingleOrDefault(m => m.Id == film.Id);
+                updatedMovie.Name = film.Name;
+                updatedMovie.ImgUrl = film.ImgUrl;
+                updatedMovie.StarRate = film.StarRate;
+                _context.Movies.Update(updatedMovie);
+            }
+            else
+            {
+                _context.Movies.Add(film);
+            }
+
+            _context.SaveChanges();
             return RedirectToAction("Index");
         }
 
         [HttpPost]
         public IActionResult Delete(int id)
         {
-            var deletedMovie =
-                Movies.Find(m => m.Id == id);
-            Movies.Remove(deletedMovie);
+            var deletedMovie = _context.Movies
+                                    .SingleOrDefault(m => m.Id == id);
+            _context.Movies.Remove(deletedMovie);
+            _context.SaveChanges();
             return RedirectToAction("Index");
         }
+
+        public IActionResult Update(int id)
+        {
+            var updatedMovie = _context.Movies
+                                    .SingleOrDefault(m => m.Id == id);
+            return View("Save",updatedMovie);
+        }
+
     }
 }
