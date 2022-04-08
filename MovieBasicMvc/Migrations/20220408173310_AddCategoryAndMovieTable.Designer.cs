@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MovieBasicMvc.Data;
 
 namespace MovieBasicMvc.Migrations
 {
     [DbContext(typeof(MovieContext))]
-    partial class MovieContextModelSnapshot : ModelSnapshot
+    [Migration("20220408173310_AddCategoryAndMovieTable")]
+    partial class AddCategoryAndMovieTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -59,26 +61,6 @@ namespace MovieBasicMvc.Migrations
                     b.ToTable("CategoryMovies");
                 });
 
-            modelBuilder.Entity("MovieBasicMvc.Models.Comment", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int?>("MovieId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Text")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("MovieId");
-
-                    b.ToTable("Comment");
-                });
-
             modelBuilder.Entity("MovieBasicMvc.Models.Movie", b =>
                 {
                     b.Property<int>("Id")
@@ -120,20 +102,6 @@ namespace MovieBasicMvc.Migrations
                     b.Navigation("Category");
 
                     b.Navigation("Movie");
-                });
-
-            modelBuilder.Entity("MovieBasicMvc.Models.Comment", b =>
-                {
-                    b.HasOne("MovieBasicMvc.Models.Movie", "Movie")
-                        .WithMany("Comments")
-                        .HasForeignKey("MovieId");
-
-                    b.Navigation("Movie");
-                });
-
-            modelBuilder.Entity("MovieBasicMvc.Models.Movie", b =>
-                {
-                    b.Navigation("Comments");
                 });
 #pragma warning restore 612, 618
         }

@@ -8,6 +8,11 @@ namespace MovieBasicMvc.Models
 {
     public class Movie
     {
+        public Movie()
+        {
+            Comments = new List<Comment>();
+        }
+
         public int Id { get; set; }
 
         [Required]
@@ -18,5 +23,6 @@ namespace MovieBasicMvc.Models
         [Required]
         public string ImgUrl { get; set; }
         public double StarRate { get; set; }
+        public List<Comment> Comments { get; set; }
     }
 }

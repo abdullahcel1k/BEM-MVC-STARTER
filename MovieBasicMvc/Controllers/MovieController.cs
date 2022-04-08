@@ -16,8 +16,15 @@ namespace MovieBasicMvc.Controllers
             _context = context;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(string key)
         {
+            if (!String.IsNullOrEmpty(key))
+            {
+                // select * from Movies where Name like "%key%"
+               var result =  _context.Movies
+                    .Where(m => m.Name.Contains(key)).ToList();
+                return View(result);
+            }
             return View(_context.Movies.ToList());
         }
 
