@@ -5,28 +5,28 @@
 <div class="row">
     <div class="col-6 offset-3">
         <div class="card text-center">
-            <img src="@ViewBag.Movie.ImgUrl" class="card-img-top"
-                 alt="@ViewBag.Movie.Name" width="350" height="450">
+            <img src="@ViewBag.movieAndComments.ImgUrl" class="card-img-top"
+                 alt="@ViewBag.movieAndComments.Name" width="350" height="450">
             <div class="card-body">
-                <h5 class="card-title">@ViewBag.Movie.Name</h5>
+                <h5 class="card-title">@ViewBag.movieAndComments.Name</h5>
                 <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
             </div>
         </div>
         <div class="card">
             <div class="card-header">
-                <form asp-action="SaveComment">
-                    <input name="MovieId" value="@ViewBag.Movie.Id" hidden />
+                @*<form asp-action="SaveComment">
+                    <input name="MovieId" value="@ViewBag.movieAndComments.Id" hidden />
                     <div class="mb-3">
                         <label class="form-label">Yorumunuz</label>
                         <input type="text"
                                class="form-control" name="Comment">
                     </div>
                     <button type="submit" class="btn btn-primary">Filmi Kaydet</button>
-                </form>
+                </form>*@
             </div>
             <div class="card-body">
                 <ul class="list-group">
-                    @foreach (var comment in ViewBag.Comments)
+                    @foreach (var comment in ViewBag.movieAndComments.Comments)
                     {
                         <li class="list-group-item">@comment.Text</li>
                     }
@@ -39,4 +39,7 @@
 
 @section Scripts {
     <script src="~/js/site.js"></script>
+<script>
+    console.log(@ViewBag.movieAndComments.Name)
+</script>
 }

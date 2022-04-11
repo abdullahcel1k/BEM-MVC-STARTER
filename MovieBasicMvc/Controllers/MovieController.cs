@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using MovieBasicMvc.Data;
 using MovieBasicMvc.Models;
 using MovieBasicMvc.ViewModels;
@@ -32,16 +33,22 @@ namespace MovieBasicMvc.Controllers
         public IActionResult Detail(int id)
         {
 
-            var selectedMovie = _context.Movies
-                                    .SingleOrDefault(m => m.Id == id);
+            //var selectedMovie = _context.Movies
+            //                        .SingleOrDefault(m => m.Id == id);
 
-
+            var movieAndComments = _context.Movies
+                                    .Where(m => m.Id == id)
+                                    .Include(m => m.Comments)
+                                    .Select(m => new TestViewModel() { Name = m.Name, ImgUrl = m.ImgUrl, Comments = m.Comments }).FirstOrDefault();
             // ViewBag.Movie = selectedMovie;
             // TempData, ViewBag, ViewData
-            ViewBag.Movie = selectedMovie;
-            ViewBag.Comments = _context.Comments.Where(c => c.Movie.Id == id).ToList();
+            //ViewBag.Movie = selectedMovie;
+            //ViewBag.Comments = _context.Comments.Where(c => c.Movie.Id == id).ToList();
+            //TestViewModel testViewModel = new TestViewModel();
+            //testViewModel = movieAndComments;
+            ViewBag.movieAndComments = movieAndComments;
             return View();
-        }
+            }
 
 
         public IActionResult Save()
