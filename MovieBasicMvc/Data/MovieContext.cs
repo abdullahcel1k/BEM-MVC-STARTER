@@ -13,6 +13,7 @@ namespace MovieBasicMvc.Data
         public DbSet<Movie> Movies { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<CategoryMovie> CategoryMovies { get; set; }
+        public DbSet<Comment> Comments { get; set; }
 
     }
 }

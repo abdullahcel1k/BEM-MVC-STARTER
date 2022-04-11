@@ -5,6 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="ViewModals\**" />
+    <Content Remove="ViewModals\**" />
+    <EmbeddedResource Remove="ViewModals\**" />
+    <None Remove="ViewModals\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Controllers\" />
     <Folder Include="wwwroot\images\" />
   </ItemGroup>

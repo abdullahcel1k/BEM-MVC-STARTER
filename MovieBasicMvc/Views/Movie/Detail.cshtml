@@ -1,15 +1,37 @@
-﻿@model Movie
+﻿@model SaveCommentViewModel
 
 <link rel="stylesheet" href="~/css/detail.css" />
 
 <div class="row">
     <div class="col-6 offset-3">
         <div class="card text-center">
-            <img src="@Model.ImgUrl" class="card-img-top"
-                 alt="@Model.Name" width="350" height="450">
+            <img src="@ViewBag.Movie.ImgUrl" class="card-img-top"
+                 alt="@ViewBag.Movie.Name" width="350" height="450">
             <div class="card-body">
-                <h5 class="card-title">@Model.Name</h5>
+                <h5 class="card-title">@ViewBag.Movie.Name</h5>
                 <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header">
+                <form asp-action="SaveComment">
+                    <input name="MovieId" value="@ViewBag.Movie.Id" hidden />
+                    <div class="mb-3">
+                        <label class="form-label">Yorumunuz</label>
+                        <input type="text"
+                               class="form-control" name="Comment">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Filmi Kaydet</button>
+                </form>
+            </div>
+            <div class="card-body">
+                <ul class="list-group">
+                    @foreach (var comment in ViewBag.Comments)
+                    {
+                        <li class="list-group-item">@comment.Text</li>
+                    }
+
+                </ul>
             </div>
         </div>
     </div>

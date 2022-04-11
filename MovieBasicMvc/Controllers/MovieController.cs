@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MovieBasicMvc.Data;
 using MovieBasicMvc.Models;
+using MovieBasicMvc.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,7 +38,9 @@ namespace MovieBasicMvc.Controllers
 
             // ViewBag.Movie = selectedMovie;
             // TempData, ViewBag, ViewData
-            return View(selectedMovie);
+            ViewBag.Movie = selectedMovie;
+            ViewBag.Comments = _context.Comments.Where(c => c.Movie.Id == id).ToList();
+            return View();
         }
 
 
@@ -71,6 +74,19 @@ namespace MovieBasicMvc.Controllers
 
             _context.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public IActionResult SaveComment(SaveCommentViewModel saveComment)
+        {
+            Comment comment = new Comment();
+            comment.Text = saveComment.Comment;
+            comment.Movie = _context.Movies.SingleOrDefault(m => m.Id == saveComment.MovieId);
+
+            _context.Comments.Add(comment);
+            _context.SaveChanges();
+
+            return RedirectToAction("Detail", new { Id = saveComment.MovieId });
         }
 
         [HttpPost]
