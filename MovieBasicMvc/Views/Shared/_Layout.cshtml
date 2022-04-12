@@ -8,6 +8,7 @@
           href="~/lib/bootstrap/css/bootstrap.min.css" />
     <link rel="stylesheet"
           href="~/css/style.css" />
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -23,9 +24,9 @@
                            asp-controller="Movie" asp-action="Index">Home</a>
                     </li>
                 </ul>
-                <form class="d-flex" asp-controller="Movie" 
+                <form class="d-flex" asp-controller="Movie"
                       asp-action="Index" method="get">
-                    <input class="form-control me-2" 
+                    <input class="form-control me-2"
                            type="search" placeholder="Search" name="key">
                     <button class="btn btn-outline-success" type="submit">Search</button>
                 </form>
@@ -37,6 +38,7 @@
         @RenderBody()
     </div>
     <script src="~/lib/bootstrap/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>

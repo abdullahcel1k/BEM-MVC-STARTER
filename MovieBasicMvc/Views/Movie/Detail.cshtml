@@ -9,12 +9,12 @@
                  alt="@ViewBag.movieAndComments.Name" width="350" height="450">
             <div class="card-body">
                 <h5 class="card-title">@ViewBag.movieAndComments.Name</h5>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                <p class="card-text">@ViewBag.movieAndComments.Description</p>
             </div>
         </div>
         <div class="card">
             <div class="card-header">
-                @*<form asp-action="SaveComment">
+                <form asp-action="SaveComment">
                     <input name="MovieId" value="@ViewBag.movieAndComments.Id" hidden />
                     <div class="mb-3">
                         <label class="form-label">Yorumunuz</label>
@@ -22,7 +22,7 @@
                                class="form-control" name="Comment">
                     </div>
                     <button type="submit" class="btn btn-primary">Filmi Kaydet</button>
-                </form>*@
+                </form>
             </div>
             <div class="card-body">
                 <ul class="list-group">

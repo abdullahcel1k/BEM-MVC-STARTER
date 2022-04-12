@@ -1,4 +1,4 @@
-﻿@model Movie
+﻿@model SaveMovieViewModel
 
 <div asp-validation-summary="All"
      class="alert alert-danger"></div>
@@ -19,5 +19,32 @@
         <input type="number"
                class="form-control" asp-for="StarRate">
     </div>
+    <div class="mb-3">
+        <label class="form-label">Film Kategorisi</label>
+        <select class="form-control" asp-for="CategoryId">
+            @foreach (var cat in ViewBag.Categories)
+            {
+                <option value="@cat.Id">@cat.Name</option>
+            }
+        </select>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Film Kategorisi</label>
+        <select class="js-example-basic-multiple" asp-for="CategoryId" multiple="multiple">
+            @foreach (var cat in ViewBag.Categories)
+            {
+                <option value="@cat.Id">@cat.Name</option>
+            }
+        </select>
+    </div>
     <button type="submit" class="btn btn-primary">Filmi Kaydet</button>
 </form>
+
+@section Scripts{ 
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.js-example-basic-multiple').select2();
+        });
+    </script>
+}

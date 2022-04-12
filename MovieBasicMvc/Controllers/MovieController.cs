@@ -39,7 +39,15 @@ namespace MovieBasicMvc.Controllers
             var movieAndComments = _context.Movies
                                     .Where(m => m.Id == id)
                                     .Include(m => m.Comments)
-                                    .Select(m => new TestViewModel() { Name = m.Name, ImgUrl = m.ImgUrl, Comments = m.Comments }).FirstOrDefault();
+                                    .Select(m =>
+                                        new DetailViewModel() {
+                                            Id = m.Id,
+                                            Name = m.Name, 
+                                            Description = m.Description,
+                                            ImgUrl = m.ImgUrl, 
+                                            Comments = m.Comments 
+                                        })
+                                    .FirstOrDefault();
             // ViewBag.Movie = selectedMovie;
             // TempData, ViewBag, ViewData
             //ViewBag.Movie = selectedMovie;
@@ -53,30 +61,44 @@ namespace MovieBasicMvc.Controllers
 
         public IActionResult Save()
         {
-            Movie movie = new Movie();
-            return View(movie);
+            SaveMovieViewModel saveMovie = new SaveMovieViewModel();
+            var categories = _context.Categories.ToList();
+            ViewBag.Categories = categories;
+            return View(saveMovie);
         }
 
         [HttpPost]
-        public IActionResult SaveMovie(Movie film)
+        public IActionResult SaveMovie(SaveMovieViewModel saveMovie)
         {
             if (!ModelState.IsValid)
             {
                 return View("Save");
             }
 
-            if(film.Id != 0)
+            if(saveMovie.Id != 0)
             {
                 var updatedMovie = _context.Movies
-                                    .SingleOrDefault(m => m.Id == film.Id);
-                updatedMovie.Name = film.Name;
-                updatedMovie.ImgUrl = film.ImgUrl;
-                updatedMovie.StarRate = film.StarRate;
+                                    .SingleOrDefault(m => m.Id == saveMovie.Id);
+                updatedMovie.Name = saveMovie.Name;
+                updatedMovie.ImgUrl = saveMovie.ImgUrl;
+                updatedMovie.StarRate = saveMovie.StarRate;
                 _context.Movies.Update(updatedMovie);
             }
             else
             {
-                _context.Movies.Add(film);
+                Movie movie = new Movie();
+                movie.Name = saveMovie.Name;
+                movie.Description = saveMovie.Description;
+                movie.StarRate = saveMovie.StarRate;
+                movie.ImgUrl = saveMovie.ImgUrl;
+
+                _context.Movies.Add(movie);
+
+                //CategoryMovie categoryMovie = new CategoryMovie();
+                //categoryMovie.Movie = movie;
+                //categoryMovie.Category = _context.Categories.FirstOrDefault(c => c.Id == saveMovie.CategoryId);
+
+                //_context.CategoryMovies.Add(categoryMovie);
             }
 
             _context.SaveChanges();
