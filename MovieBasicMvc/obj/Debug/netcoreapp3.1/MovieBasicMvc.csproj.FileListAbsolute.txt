@@ -149,3 +149,4 @@ C:\Users\PC1411\Documents\BEMProjectes\MVC-Courses\MovieBasicMvc\MovieBasicMvc\b
 C:\Users\PC1411\Documents\BEMProjectes\MVC-Courses\MovieBasicMvc\MovieBasicMvc\bin\Debug\netcoreapp3.1\Humanizer.dll
 C:\Users\PC1411\Documents\BEMProjectes\MVC-Courses\MovieBasicMvc\MovieBasicMvc\bin\Debug\netcoreapp3.1\Microsoft.EntityFrameworkCore.Design.dll
 C:\Users\PC1411\Documents\BEMProjectes\MVC-Courses\MovieBasicMvc\MovieBasicMvc\obj\Debug\netcoreapp3.1\Razor\Views\Movie\Save.cshtml.g.cs
+C:\Users\PC1411\Documents\BEMProjectes\MVC-Courses\MovieBasicMvc\MovieBasicMvc\obj\Debug\netcoreapp3.1\Razor\Views\Category\Index.cshtml.g.cs
