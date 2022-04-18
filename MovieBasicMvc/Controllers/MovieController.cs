@@ -6,6 +6,7 @@ using MovieBasicMvc.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace MovieBasicMvc.Controllers
 {
@@ -56,7 +57,7 @@ namespace MovieBasicMvc.Controllers
         }
 
         [HttpPost]
-        public IActionResult SaveMovie(SaveMovieViewModel saveMovie)
+        public async Task<IActionResult> SaveMovie(SaveMovieViewModel saveMovie)
         {
             if (!ModelState.IsValid)
             {
@@ -70,6 +71,32 @@ namespace MovieBasicMvc.Controllers
                 updatedMovie.Name = saveMovie.Name;
                 updatedMovie.ImgUrl = saveMovie.ImgUrl;
                 updatedMovie.StarRate = saveMovie.StarRate;
+
+                var categoryLists = _context.CategoryMovies
+                    .Where(cm => cm.Movie.Id == saveMovie.Id)
+                    .Select(cm => cm.Category.Id).ToList();
+
+                var deletedCategory = categoryLists.Except(saveMovie.CategoryIds).ToList();
+
+                deletedCategory.ForEach(item =>
+                {
+                    var deletedMovieCategory = _context.CategoryMovies
+                    .FirstOrDefault(c => c.Category.Id == item);
+                    var delete = _context.CategoryMovies.Remove(deletedMovieCategory);
+                });
+
+                _context.SaveChanges();
+                var addedCategory = saveMovie.CategoryIds.Except(categoryLists).ToList();
+                addedCategory.ForEach(category =>
+                {
+                    CategoryMovie categoryMovie = new CategoryMovie();
+                    categoryMovie.Movie = updatedMovie;
+                    categoryMovie.Category = _context.Categories
+                    .FirstOrDefault(c => c.Id == category);
+
+                    _context.CategoryMovies.Add(categoryMovie);
+                });
+
                 _context.Movies.Update(updatedMovie);
             }
             else
@@ -120,6 +147,14 @@ namespace MovieBasicMvc.Controllers
         [HttpPost]
         public IActionResult Delete(int id)
         {
+            var deletedCategoryMovies = _context.CategoryMovies
+                .Where(x => x.Movie.Id == id);
+            _context.CategoryMovies.RemoveRange(deletedCategoryMovies);
+
+            var deletedComments = _context.Comments
+                .Where(x => x.Movie.Id == id);
+            _context.Comments.RemoveRange(deletedComments);
+
             var deletedMovie = _context.Movies
                                     .SingleOrDefault(m => m.Id == id);
             _context.Movies.Remove(deletedMovie);
@@ -131,7 +166,21 @@ namespace MovieBasicMvc.Controllers
         {
             var updatedMovie = _context.Movies
                                     .SingleOrDefault(m => m.Id == id);
-            return View("Save", updatedMovie);
+            SaveMovieViewModel movieViewModel = new SaveMovieViewModel();
+            movieViewModel.Id = updatedMovie.Id;
+            movieViewModel.Name = updatedMovie.Name;
+            movieViewModel.Description = updatedMovie.Description;
+            movieViewModel.ImgUrl = updatedMovie.ImgUrl;
+            movieViewModel.StarRate = updatedMovie.StarRate;
+
+            movieViewModel.CategoryIds = _context.CategoryMovies
+                .Where(cm => cm.Movie.Id == id)
+                .Include(cm => cm.Category)
+                .Select(cm => cm.Category.Id)
+                .ToList();
+            var categories = _context.Categories.ToList();
+            ViewBag.Categories = categories;
+            return View("Save", movieViewModel);
         }
 
     }
