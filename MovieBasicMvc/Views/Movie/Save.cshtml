@@ -21,16 +21,7 @@
     </div>
     <div class="mb-3">
         <label class="form-label">Film Kategorisi</label>
-        <select class="form-control" asp-for="CategoryId">
-            @foreach (var cat in ViewBag.Categories)
-            {
-                <option value="@cat.Id">@cat.Name</option>
-            }
-        </select>
-    </div>
-    <div class="mb-3">
-        <label class="form-label">Film Kategorisi</label>
-        <select class="js-example-basic-multiple" asp-for="CategoryId" multiple="multiple">
+        <select class="form-control js-example-basic-multiple" asp-for="CategoryIds" multiple="multiple">
             @foreach (var cat in ViewBag.Categories)
             {
                 <option value="@cat.Id">@cat.Name</option>

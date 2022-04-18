@@ -23,8 +23,8 @@ namespace MovieBasicMvc.Controllers
             if (!String.IsNullOrEmpty(key))
             {
                 // select * from Movies where Name like "%key%"
-               var result =  _context.Movies
-                    .Where(m => m.Name.Contains(key)).ToList();
+                var result = _context.Movies
+                     .Where(m => m.Name.Contains(key)).ToList();
                 return View(result);
             }
             return View(_context.Movies.ToList());
@@ -32,31 +32,19 @@ namespace MovieBasicMvc.Controllers
 
         public IActionResult Detail(int id)
         {
+            DetailViewModel detailViewModel = new DetailViewModel();
 
-            //var selectedMovie = _context.Movies
-            //                        .SingleOrDefault(m => m.Id == id);
-
-            var movieAndComments = _context.Movies
+            detailViewModel.Movie = _context.Movies
                                     .Where(m => m.Id == id)
                                     .Include(m => m.Comments)
-                                    .Select(m =>
-                                        new DetailViewModel() {
-                                            Id = m.Id,
-                                            Name = m.Name, 
-                                            Description = m.Description,
-                                            ImgUrl = m.ImgUrl, 
-                                            Comments = m.Comments 
-                                        })
                                     .FirstOrDefault();
-            // ViewBag.Movie = selectedMovie;
-            // TempData, ViewBag, ViewData
-            //ViewBag.Movie = selectedMovie;
-            //ViewBag.Comments = _context.Comments.Where(c => c.Movie.Id == id).ToList();
-            //TestViewModel testViewModel = new TestViewModel();
-            //testViewModel = movieAndComments;
-            ViewBag.movieAndComments = movieAndComments;
-            return View();
-            }
+            detailViewModel.Categories = _context.CategoryMovies
+                                .Where(cm => cm.Movie.Id == id)
+                                .Include(cm => cm.Category)
+                                .Select(cm => cm.Category).ToList();
+
+            return View(detailViewModel);
+        }
 
 
         public IActionResult Save()
@@ -75,7 +63,7 @@ namespace MovieBasicMvc.Controllers
                 return View("Save");
             }
 
-            if(saveMovie.Id != 0)
+            if (saveMovie.Id != 0)
             {
                 var updatedMovie = _context.Movies
                                     .SingleOrDefault(m => m.Id == saveMovie.Id);
@@ -94,11 +82,14 @@ namespace MovieBasicMvc.Controllers
 
                 _context.Movies.Add(movie);
 
-                //CategoryMovie categoryMovie = new CategoryMovie();
-                //categoryMovie.Movie = movie;
-                //categoryMovie.Category = _context.Categories.FirstOrDefault(c => c.Id == saveMovie.CategoryId);
+                saveMovie.CategoryIds.ForEach(category =>
+                {
+                    CategoryMovie categoryMovie = new CategoryMovie();
+                    categoryMovie.Movie = movie;
+                    categoryMovie.Category = _context.Categories.FirstOrDefault(c => c.Id == category);
 
-                //_context.CategoryMovies.Add(categoryMovie);
+                    _context.CategoryMovies.Add(categoryMovie);
+                });
             }
 
             _context.SaveChanges();
@@ -106,16 +97,24 @@ namespace MovieBasicMvc.Controllers
         }
 
         [HttpPost]
-        public IActionResult SaveComment(SaveCommentViewModel saveComment)
+        public IActionResult SaveComment(Comment comment)
         {
-            Comment comment = new Comment();
-            comment.Text = saveComment.Comment;
-            comment.Movie = _context.Movies.SingleOrDefault(m => m.Id == saveComment.MovieId);
-
+            comment.Movie = _context.Movies.FirstOrDefault(m => m.Id == comment.Movie.Id);
             _context.Comments.Add(comment);
             _context.SaveChanges();
 
-            return RedirectToAction("Detail", new { Id = saveComment.MovieId });
+            return RedirectToAction("Detail", new { Id = comment.Movie.Id });
+        }
+
+        public IActionResult CommentDelete(Comment comment)
+        {
+            var deletedComment = _context.Comments
+                .Where(c => c.Id == comment.Id).Include(c => c.Movie)
+                .FirstOrDefault();
+            var Id = deletedComment.Movie.Id;
+            _context.Comments.Remove(deletedComment);
+            _context.SaveChanges();
+            return RedirectToAction("Detail", new { Id });
         }
 
         [HttpPost]
@@ -132,7 +131,7 @@ namespace MovieBasicMvc.Controllers
         {
             var updatedMovie = _context.Movies
                                     .SingleOrDefault(m => m.Id == id);
-            return View("Save",updatedMovie);
+            return View("Save", updatedMovie);
         }
 
     }

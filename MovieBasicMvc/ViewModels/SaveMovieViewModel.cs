@@ -12,6 +12,6 @@ namespace MovieBasicMvc.ViewModels
         public string Description { get; set; }
         public string ImgUrl { get; set; }
         public double StarRate { get; set; }
-        public List<int> CategoryId { get; set; }
+        public List<int> CategoryIds { get; set; }
     }
 }

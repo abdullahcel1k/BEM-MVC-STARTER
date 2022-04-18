@@ -1,34 +1,46 @@
-﻿@model SaveCommentViewModel
+﻿@model DetailViewModel
 
 <link rel="stylesheet" href="~/css/detail.css" />
 
 <div class="row">
     <div class="col-6 offset-3">
         <div class="card text-center">
-            <img src="@ViewBag.movieAndComments.ImgUrl" class="card-img-top"
-                 alt="@ViewBag.movieAndComments.Name" width="350" height="450">
+            <img src="@Model.Movie.ImgUrl" class="card-img-top"
+                 alt="@Model.Movie.Name" width="350" height="450">
             <div class="card-body">
-                <h5 class="card-title">@ViewBag.movieAndComments.Name</h5>
-                <p class="card-text">@ViewBag.movieAndComments.Description</p>
+                <h5 class="card-title">@Model.Movie.Name</h5>
+                <div>
+                    @foreach (var category in @Model.Categories)
+                    {
+                        <span class="badge bg-secondary">@category.Name</span>
+                    }
+                </div>
+                <p class="card-text">@Model.Movie.Description</p>
             </div>
         </div>
         <div class="card">
             <div class="card-header">
                 <form asp-action="SaveComment">
-                    <input name="MovieId" value="@ViewBag.movieAndComments.Id" hidden />
+                    <input asp-for="Comment.Movie.Id" value="@Model.Movie.Id" hidden />
                     <div class="mb-3">
                         <label class="form-label">Yorumunuz</label>
                         <input type="text"
-                               class="form-control" name="Comment">
+                               class="form-control" asp-for="Comment.Text">
                     </div>
-                    <button type="submit" class="btn btn-primary">Filmi Kaydet</button>
+                    <button type="submit" class="btn btn-primary">Yorumu Kaydet</button>
                 </form>
             </div>
             <div class="card-body">
                 <ul class="list-group">
-                    @foreach (var comment in ViewBag.movieAndComments.Comments)
+                    @foreach (var comment in Model.Movie.Comments)
                     {
-                        <li class="list-group-item">@comment.Text</li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            @comment.Text
+                            <form asp-action="CommentDelete">
+                                <input asp-for="Comment.Id" value="@comment.Id" hidden />
+                                <button class="btn btn-danger">Sil</button>
+                            </form>
+                        </li>
                     }
 
                 </ul>
@@ -39,7 +51,4 @@
 
 @section Scripts {
     <script src="~/js/site.js"></script>
-<script>
-    console.log(@ViewBag.movieAndComments.Name)
-</script>
 }
