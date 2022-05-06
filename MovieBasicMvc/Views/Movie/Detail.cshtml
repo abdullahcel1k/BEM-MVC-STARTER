@@ -5,7 +5,7 @@
 <div class="row">
     <div class="col-6 offset-3">
         <div class="card text-center">
-            <img src="@Model.Movie.ImgUrl" class="card-img-top"
+            <img src="~/images/@Model.Movie.ImgUrl" class="card-img-top"
                  alt="@Model.Movie.Name" width="350" height="450">
             <div class="card-body">
                 <h5 class="card-title">@Model.Movie.Name</h5>
@@ -49,6 +49,20 @@
     </div>
 </div>
 
+@await Component.InvokeAsync("SimilarMovies",
+                   new
+                   {
+                       title = "Benzer Filmler",
+                       movieId = Model.Movie.Id
+                     }
+                   )
+
 @section Scripts {
     <script src="~/js/site.js"></script>
+    <script src="~/lib/owl/owl.carousel.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $(".owl-carousel").owlCarousel();
+        });
+    </script>
 }

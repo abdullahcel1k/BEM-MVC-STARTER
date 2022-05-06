@@ -5,6 +5,7 @@ using MovieBasicMvc.Models;
 using MovieBasicMvc.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -105,7 +106,15 @@ namespace MovieBasicMvc.Controllers
                 movie.Name = saveMovie.Name;
                 movie.Description = saveMovie.Description;
                 movie.StarRate = saveMovie.StarRate;
-                movie.ImgUrl = saveMovie.ImgUrl;
+
+                if (saveMovie.ImgFile != null)
+                {
+                    var uniqueFileName = GetUniqueFileName(saveMovie.ImgFile.FileName);
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", uniqueFileName);
+                    saveMovie.ImgFile.CopyTo(new FileStream(filePath, FileMode.Create));
+
+                    movie.ImgUrl = uniqueFileName;
+                }
 
                 _context.Movies.Add(movie);
 
@@ -121,6 +130,15 @@ namespace MovieBasicMvc.Controllers
 
             _context.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+        private string GetUniqueFileName(string fileName)
+        {
+            fileName = Path.GetFileName(fileName);
+            return Path.GetFileNameWithoutExtension(fileName)
+                      + "_"
+                      + Guid.NewGuid().ToString().Substring(0, 4)
+                      + Path.GetExtension(fileName);
         }
 
         [HttpPost]

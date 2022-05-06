@@ -1,0 +1,18 @@
+﻿@model SimiliarViewModel
+
+<div class="row">
+    <h3 class="text-center">@Model.Title</h3>
+    <div class="owl-carousel">
+        @foreach(var movie in Model.Movies)
+            {
+        <div class="card">
+            <div class="card-body">
+                <img src="~/images/@movie.ImgUrl" />
+            </div>
+            <div class="card-footer">
+                <h3>@movie.Name</h3>
+            </div>
+        </div>
+            }
+    </div>
+</div>

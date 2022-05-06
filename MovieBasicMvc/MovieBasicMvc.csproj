@@ -12,7 +12,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="NewFolder\" />
+    <Folder Include="Views\Shared\NewFolder\" />
     <Folder Include="wwwroot\images\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\lib\owl\LICENSE" />
+    <None Include="wwwroot\lib\owl\owl.carousel.js" />
+    <None Include="wwwroot\lib\owl\owl.carousel.min.js" />
+    <None Include="wwwroot\lib\owl\README.md" />
   </ItemGroup>
 
   <ItemGroup>

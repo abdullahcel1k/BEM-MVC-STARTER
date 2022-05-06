@@ -2,7 +2,7 @@
 
 <div asp-validation-summary="All"
      class="alert alert-danger"></div>
-<form asp-action="SaveMovie">
+<form asp-action="SaveMovie" enctype="multipart/form-data">
     <input asp-for="Id" hidden />
     <div class="mb-3">
         <label class="form-label">Film Adı</label>
@@ -11,8 +11,8 @@
     </div>
     <div class="mb-3">
         <label class="form-label">Film Resmi</label>
-        <input type="text"
-               class="form-control" asp-for="ImgUrl">
+        <input type="file"
+               class="form-control" asp-for="ImgFile" accept="image/png, image/gif, image/jpeg">
     </div>
     <div class="mb-3">
         <label class="form-label">Film Yıldızı</label>

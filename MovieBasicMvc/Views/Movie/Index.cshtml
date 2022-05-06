@@ -1,5 +1,5 @@
 ﻿@model List<Movie>
-@{ 
+@{
     ViewBag.Title = "Anasayfa";
 }
 <div class="row">
@@ -12,7 +12,7 @@
     @foreach (var item in Model)
     {
         <div class="col-4 card">
-            <img src="@item.ImgUrl" class="card-img-top"
+            <img src="~/images/@item.ImgUrl" class="card-img-top"
                  alt="@item.Name" width="300" height="450">
             <div class="card-body">
                 <h5 class="card-title">@item.Name</h5>
@@ -37,3 +37,21 @@
         </div>
     }
 </div>
+
+@await Component.InvokeAsync("SimilarMovies",
+                   new
+                   {
+                       title = "Bu Hafta En Çok İzlenenler",
+                       movieId = 0
+                     }
+                   )
+
+@section Scripts {
+    <script src="~/js/site.js"></script>
+    <script src="~/lib/owl/owl.carousel.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $(".owl-carousel").owlCarousel();
+        });
+    </script>
+}
